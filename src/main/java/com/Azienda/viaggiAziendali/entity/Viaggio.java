@@ -1,13 +1,18 @@
 package com.Azienda.viaggiAziendali.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity(name = "viaggi")
+@Component
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Viaggio {
 
     @Id
@@ -19,4 +24,7 @@ public class Viaggio {
     private LocalDate dataViaggio;
     private String stato;
 
+    public Viaggio(Long id) {
+        this.id = id;
+    }
 }

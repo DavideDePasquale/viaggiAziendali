@@ -1,12 +1,17 @@
 package com.Azienda.viaggiAziendali.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 @Entity(name = "dipendenti")
+@Component
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Dipendente {
 
     @Id
@@ -23,6 +28,7 @@ public class Dipendente {
     private String immagineProfilo;
 
 
-
-
+    public Dipendente(Long idDipendente) {
+        this.idDipendente = idDipendente;
+    }
 }
