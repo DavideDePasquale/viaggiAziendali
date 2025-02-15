@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/prenotazioni")
 public class PrenotazioneController {
@@ -26,6 +28,7 @@ public class PrenotazioneController {
     @Autowired
     DipendenteRepository dipendenteRepository;
 
+    // mi creo una nuova prenotazione
     @PostMapping("/nuovaprenotazione")
     @ResponseStatus(HttpStatus.CREATED)
     public PrenotazioneDTO creaPrenotazione(@RequestBody @Validated PrenotazioneDTO prenotazioneDTO) {
@@ -35,5 +38,24 @@ public class PrenotazioneController {
         prenotazioneDTO.setDipendente(dipendente);
         return prenotazioneService.createPrenotazioneDto(prenotazioneDTO);
 
+    }
+
+    // mi recupero tutte le prenotazioni presenti nel db
+    @GetMapping("/tutteleprenotazioni")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public List<PrenotazioneDTO> getAllPrenotazioni(){
+        return prenotazioneService.getAllPrenotazioni();
+    }
+    // mi restituisce una prenotazione presente nel db
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public PrenotazioneDTO getPrenotazioneById(@PathVariable Long id){
+        return prenotazioneService.getPrenotazioneById(id);
+    }
+    //eliminazione di una prenotazione presente nel db
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deletePrenotazione(@PathVariable Long id){
+        return prenotazioneService.deletePrenotazione(id);
     }
 }

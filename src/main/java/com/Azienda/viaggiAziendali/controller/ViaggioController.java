@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/viaggi")
 public class ViaggioController {
@@ -17,6 +19,7 @@ public class ViaggioController {
     @Autowired
     ViaggioService viaggioService;
 
+    //aggiunta viaggio
     @PostMapping("/newviaggio")
     @ResponseStatus(HttpStatus.CREATED)
     public ViaggioDTO createNewViaggio(@RequestBody @Validated ViaggioDTO viaggioDTO){
@@ -25,4 +28,23 @@ public class ViaggioController {
         }
         return viaggioService.createViaggioDto(viaggioDTO);
     }
+    //get che ritorna tutti i viaggi nel db
+    @GetMapping("/tuttiiviaggi")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public List<ViaggioDTO> getAllViaggi(){
+        return viaggioService.getAllViaggi();
+    }
+    // mi ritorna un singolo viaggio
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ViaggioDTO getViaggioById(@PathVariable Long id){
+        return viaggioService.getViaggioById(id);
+    }
+    //eliminazione di un viaggio presente nel db
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteViaggio(@PathVariable Long id){
+        return viaggioService.deleteViaggio(id);
+    }
+
 }

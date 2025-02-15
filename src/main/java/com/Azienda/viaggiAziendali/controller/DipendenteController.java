@@ -2,6 +2,7 @@ package com.Azienda.viaggiAziendali.controller;
 
 import com.Azienda.viaggiAziendali.entity.Dipendente;
 import com.Azienda.viaggiAziendali.payload.DipendenteDTO;
+import com.Azienda.viaggiAziendali.payload.PrenotazioneDTO;
 import com.Azienda.viaggiAziendali.service.DipendenteService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,6 +28,7 @@ public class DipendenteController {
     DipendenteService dipendenteService;
 
 
+    //mi creo un nuovo dipendente
     @PostMapping("/nuovodipendente")
     @ResponseStatus(HttpStatus.CREATED)
     public DipendenteDTO creaDipendente(@RequestPart("immagine_profilo") MultipartFile immagine_profilo, @RequestPart @Validated DipendenteDTO dipendenteDTO, BindingResult validation) {
@@ -60,9 +63,29 @@ public class DipendenteController {
         return dipendenteDTO;
     }
 
+    // mi modifica un dipendente grazie all'id
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public DipendenteDTO modificaDipendente(@RequestBody DipendenteDTO dipendenteDTO, @PathVariable Long id){
       return dipendenteService.modifyDipendente(dipendenteDTO,id);
+    }
+    // mi restituisce tutti i dipendenti nel db
+    @GetMapping("/tuttiidipendenti")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public List<DipendenteDTO> getAllViaggi(){
+        return dipendenteService.getAllDipendenti();
+
+    }
+    // mi restituisce un dipendente del db.
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public DipendenteDTO getDipendenteById(@PathVariable Long id){
+        return dipendenteService.getDipendenteById(id);
+    }
+    //eliminazione di un diooendente nel db
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteDipendente(@PathVariable Long id){
+        return dipendenteService.deleteDipendente(id);
     }
 }

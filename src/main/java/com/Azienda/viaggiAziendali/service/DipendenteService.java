@@ -7,6 +7,11 @@ import com.Azienda.viaggiAziendali.repository.DipendenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static com.Azienda.viaggiAziendali.mapper.DipendenteMapperDTO.toDipendenteDTO;
 import static com.Azienda.viaggiAziendali.mapper.DipendenteMapperDTO.toDipendenteEntity;
 
 @Service
@@ -48,7 +53,38 @@ public class DipendenteService {
        }
        //salvo le eventuali modifiche nel db
        dipendente = dipendenteRepository.save(dipendente);
-       return dipendenteMapperDTO.toDipendenteDTO(dipendente);
+       return toDipendenteDTO(dipendente);
+    }
+
+    //Get all dipendenti
+    public List<DipendenteDTO> getAllDipendenti(){
+        List<Dipendente> dipendenti = dipendenteRepository.findAll();
+        List<DipendenteDTO> dipendentiDto = new ArrayList<DipendenteDTO>();
+        for (Dipendente singoloDipendente : dipendenti){
+            dipendentiDto.add(toDipendenteDTO(singoloDipendente));
+
+        }
+        return dipendentiDto;
+    }
+    //get singolo dipendente tramite l'id
+    public DipendenteDTO getDipendenteById(Long id){
+        Optional<Dipendente> dipendente = dipendenteRepository.findById(id);
+        if (dipendente.isPresent()){
+            return toDipendenteDTO(dipendente.get());
+        } else {
+            throw new RuntimeException("Non c'è nessun Dipendente con l'ID : " + id);
+        }
+    }
+    //eliminazione di un singolo dipendente
+    public String deleteDipendente(Long id){
+        Optional<Dipendente> dipendenteDaEliminare = dipendenteRepository.findById(id);
+        if (dipendenteDaEliminare.isPresent()){
+            dipendenteRepository.delete(dipendenteDaEliminare.get());
+            return "Dipendente con ID " + id + " è stato eliminato con successo!☑️";
+        } else {
+
+            throw new RuntimeException("Il dipendente con ID " + id + " non è presente nel nostro db.😒");
+        }
     }
 
 }
