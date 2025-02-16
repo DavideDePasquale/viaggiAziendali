@@ -1,6 +1,8 @@
 package com.Azienda.viaggiAziendali.service;
 
+import com.Azienda.viaggiAziendali.entity.Dipendente;
 import com.Azienda.viaggiAziendali.entity.Prenotazione;
+import com.Azienda.viaggiAziendali.entity.Viaggio;
 import com.Azienda.viaggiAziendali.mapper.PrenotazioneMapperDTO;
 import com.Azienda.viaggiAziendali.payload.PrenotazioneDTO;
 import com.Azienda.viaggiAziendali.repository.PrenotazioneRepository;
@@ -24,6 +26,17 @@ public class PrenotazioneService {
 
     public PrenotazioneDTO createPrenotazioneDto(PrenotazioneDTO prenotazioneDTO){
         Prenotazione prenotazione = prenotazioneMapperDTO.toPrenotazioneEntity(prenotazioneDTO);
+        Dipendente dipendente = prenotazione.getDipendente();
+        Viaggio viaggio = prenotazione.getViaggio();
+        //controllo se il dipendente ha già qualche prenotazione in una determinata data.
+        System.out.println("Controllo prenotazione per il dipendente " + dipendente.getNome());
+        boolean esistePrenotazione = prenotazioneRepository.existsPrenotazioneByDipendenteAndData(dipendente,viaggio.getDataViaggio());
+
+        System.out.println("Esiste già una prenotazione : " +esistePrenotazione);
+        if (esistePrenotazione){
+            throw new RuntimeException("Il dipendente " + dipendente.getNome()+ " ha già una prenotazione il giorno " + viaggio.getDataViaggio());
+        }
+
         prenotazioneRepository.save(prenotazione);
         return prenotazioneDTO;
     }

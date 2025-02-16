@@ -4,6 +4,7 @@ import com.Azienda.viaggiAziendali.entity.Dipendente;
 import com.Azienda.viaggiAziendali.entity.Viaggio;
 import com.Azienda.viaggiAziendali.payload.PrenotazioneDTO;
 import com.Azienda.viaggiAziendali.repository.DipendenteRepository;
+import com.Azienda.viaggiAziendali.repository.PrenotazioneRepository;
 import com.Azienda.viaggiAziendali.repository.ViaggioRepository;
 import com.Azienda.viaggiAziendali.service.PrenotazioneService;
 import com.Azienda.viaggiAziendali.service.ViaggioService;
@@ -21,6 +22,8 @@ public class PrenotazioneController {
 
     @Autowired
     Cloudinary cloudinary;
+    @Autowired
+    PrenotazioneRepository prenotazioneRepository;
     @Autowired
     PrenotazioneService prenotazioneService;
     @Autowired
