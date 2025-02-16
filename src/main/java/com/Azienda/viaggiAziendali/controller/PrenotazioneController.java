@@ -58,4 +58,10 @@ public class PrenotazioneController {
     public String deletePrenotazione(@PathVariable Long id){
         return prenotazioneService.deletePrenotazione(id);
     }
+    // modifica di una prenotazione presente nel db
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public PrenotazioneDTO modifyPrenotazione(@RequestBody PrenotazioneDTO prenotazioneDTO, @PathVariable Long id){
+        return prenotazioneService.modifyPrenotazione(prenotazioneDTO,id);
+    }
 }

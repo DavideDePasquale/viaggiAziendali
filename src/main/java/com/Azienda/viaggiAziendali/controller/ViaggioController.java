@@ -19,7 +19,7 @@ public class ViaggioController {
     @Autowired
     ViaggioService viaggioService;
 
-    //aggiunta viaggio
+    // aggiunta viaggio
     @PostMapping("/newviaggio")
     @ResponseStatus(HttpStatus.CREATED)
     public ViaggioDTO createNewViaggio(@RequestBody @Validated ViaggioDTO viaggioDTO){
@@ -28,7 +28,7 @@ public class ViaggioController {
         }
         return viaggioService.createViaggioDto(viaggioDTO);
     }
-    //get che ritorna tutti i viaggi nel db
+    // get che ritorna tutti i viaggi nel db
     @GetMapping("/tuttiiviaggi")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public List<ViaggioDTO> getAllViaggi(){
@@ -40,11 +40,17 @@ public class ViaggioController {
     public ViaggioDTO getViaggioById(@PathVariable Long id){
         return viaggioService.getViaggioById(id);
     }
-    //eliminazione di un viaggio presente nel db
+    // eliminazione di un viaggio presente nel db
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteViaggio(@PathVariable Long id){
         return viaggioService.deleteViaggio(id);
+    }
+    // modifica di un viaggio presente già
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ViaggioDTO modifyViaggio(@RequestBody ViaggioDTO viaggioDTO, @PathVariable Long id){
+        return viaggioService.modifyViaggio(viaggioDTO,id);
     }
 
 }

@@ -58,4 +58,20 @@ public class ViaggioService {
             throw new RuntimeException("Viaggio con ID : "+ id + " non presente nel nostro db");
         }
     }
+
+    // modifica di un singolo viaggio
+    public ViaggioDTO modifyViaggio(ViaggioDTO viaggioDTO, Long id){
+        Viaggio viaggio = viaggioRepository.findById(id).orElseThrow(() -> new RuntimeException("Viaggio non trovato nel db!😒"));
+        if ( viaggioDTO.getDataViaggio() != null && !viaggioDTO.getDataViaggio().isEqual(viaggio.getDataViaggio())){
+             viaggio.setDataViaggio(viaggioDTO.getDataViaggio());
+        }
+        if (viaggioDTO.getDestinazione() != null && !viaggioDTO.getDestinazione().equals(viaggio.getDestinazione().toLowerCase())) {
+            viaggio.setDestinazione(viaggioDTO.getDestinazione());
+        }
+        if (viaggioDTO.getStato() != null &&  !viaggioDTO.getStato().equals(viaggio.getStato().toLowerCase())){
+            viaggio.setStato(viaggioDTO.getStato());
+        }
+        viaggio = viaggioRepository.save(viaggio);
+        return toViaggioDTO(viaggio);
+    }
 }

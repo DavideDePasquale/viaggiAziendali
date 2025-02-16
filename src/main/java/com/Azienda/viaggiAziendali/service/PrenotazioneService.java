@@ -58,4 +58,22 @@ public class PrenotazioneService {
             throw new RuntimeException("Prenotazione con id :" + id + " non è stata trovat nel nostro db😒");
         }
     }
+    // modifica di una prenotazione
+    public PrenotazioneDTO modifyPrenotazione(PrenotazioneDTO prenotazioneDTO, Long id){
+       Prenotazione prenotazione = prenotazioneRepository.findById(id).orElseThrow(() -> new RuntimeException("Prenotazione con ID "+id+ " non trovata!❌"));
+
+       if (prenotazioneDTO.getDataRichiesta() != null && !prenotazioneDTO.getDataRichiesta().isEqual(prenotazione.getDataRichiesta())){
+           prenotazione.setDataRichiesta(prenotazioneDTO.getDataRichiesta());
+       }
+       if (prenotazioneDTO.getDipendente() != null && !prenotazioneDTO.getDipendente().equals(prenotazione.getDipendente())){
+           prenotazione.setDipendente(prenotazioneDTO.getDipendente());
+       }
+       if(prenotazioneDTO.getViaggio() != null && !prenotazioneDTO.getViaggio().equals(prenotazione.getViaggio())){
+           prenotazione.setViaggio(prenotazioneDTO.getViaggio());
+       }
+       prenotazione = prenotazioneRepository.save(prenotazione);
+       return toPrenotazioneDTO(prenotazione);
+
+
+    }
 }
