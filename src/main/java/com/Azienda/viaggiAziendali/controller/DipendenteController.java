@@ -31,18 +31,19 @@ public class DipendenteController {
     //mi creo un nuovo dipendente
     @PostMapping("/nuovodipendente")
     @ResponseStatus(HttpStatus.CREATED)
-    public DipendenteDTO creaDipendente(@RequestPart("immagine_profilo") MultipartFile immagine_profilo, @RequestPart @Validated DipendenteDTO dipendenteDTO, BindingResult validation) {
+    public DipendenteDTO creaDipendente(@RequestPart("immagineProfilo") MultipartFile immagineProfilo, @RequestPart @Validated DipendenteDTO dipendenteDTO, BindingResult validation) {
 
-        if (immagine_profilo.isEmpty()) {
+        try {
 
-
-            if (validation.hasErrors()) {
-                String message = "Utente non creato";
-                for (ObjectError error : validation.getAllErrors()) {
-                    message += error.getDefaultMessage();
+                if (validation.hasErrors()) {
+                    String message = "Utente non creato";
+                    for (ObjectError error : validation.getAllErrors()) {
+                        message += error.getDefaultMessage() + "\n";
+                    }
                 }
+            if (!immagineProfilo.isEmpty()) {
                 try {
-                    Map mappa = cloudinary.uploader().upload(immagine_profilo.getBytes(), ObjectUtils.emptyMap());
+                    Map mappa = cloudinary.uploader().upload(immagineProfilo.getBytes(), ObjectUtils.emptyMap());
                     String urlImage = (String) mappa.get("secure_url");
                     dipendenteDTO.setImmagineProfilo(urlImage);
                     Long idGenerato = dipendenteService.idDipendente(dipendenteDTO);
@@ -52,17 +53,18 @@ public class DipendenteController {
                 }
 
 
-            }
-        } else {
-            if (dipendenteDTO.getUsername() == null) {
-                throw new RuntimeException("Non puo esistere un dipendente senza username!⚠️");
-            }
-            return dipendenteService.createDipendenteDto(dipendenteDTO);
+            } else {
+                if (dipendenteDTO.getUsername() == null) {
+                    throw new RuntimeException("Non puo esistere un dipendente senza username!⚠️");
+                }
+                return dipendenteService.createDipendenteDto(dipendenteDTO);
 
+            }
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
         }
-        return dipendenteDTO;
-    }
 
+    }
     // mi modifica un dipendente grazie all'id
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
